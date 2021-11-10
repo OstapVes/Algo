@@ -11,8 +11,8 @@ def valid(arr, val, angry_cows):
 
 
 def main():
-    aggressive_cows_number = 3
-    arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    aggressive_cows_number = int(input("Кількість агресивних корів:"))
+    arr = list(map(int, input("Стійла:").split()))
     arr.sort()
     right_index = arr[len(arr) - 1]
     left_index = 1
