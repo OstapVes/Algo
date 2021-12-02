@@ -1,11 +1,11 @@
 import math
 
 
-def get_max_vertex(k, V, S):
+def get_max_vertex(k, g, s):
     m = 0
     v = -1
-    for i, w in enumerate(V[k]):
-        if i in S:
+    for i, w in enumerate(g[k]):
+        if i in s:
             continue
 
         if w[2] == 1:
@@ -20,62 +20,53 @@ def get_max_vertex(k, V, S):
     return v
 
 
-def get_max_flow(T):
-    w = [x[0] for x in T]
+def get_max_flow(m):
+    w = [x[0] for x in m]
     return min(*w)
 
 
-def updateV(V, T, f):
-    for t in T:
+def update_graph(g, m, f):
+    for t in m:
         if t[1] == -1:
             continue
 
-        sgn = V[t[2]][t[1]][2]
-        V[t[1]][t[2]][0] -= f * sgn
-        V[t[1]][t[2]][1] += f * sgn
+        sgn = g[t[2]][t[1]][2]
+        g[t[1]][t[2]][0] -= f * sgn
+        g[t[1]][t[2]][1] += f * sgn
 
-        V[t[2]][t[1]][0] -= f * sgn
-        V[t[2]][t[1]][1] += f * sgn
+        g[t[2]][t[1]][0] -= f * sgn
+        g[t[2]][t[1]][1] += f * sgn
 
 
-V = [[[0, 0, 1], [20, 0, 1], [30, 0, 1], [10, 0, 1], [0, 0, 1]],
-     [[20, 0, -1], [0, 0, 1], [40, 0, 1], [0, 0, 1], [30, 0, 1]],
-     [[30, 0, -1], [40, 0, -1], [0, 0, 1], [10, 0, 1], [20, 0, 1]],
-     [[10, 0, -1], [0, 0, 1], [10, 0, -1], [0, 0, 1], [20, 0, 1]],
-     [[0, 0, 1], [30, 0, -1], [20, 0, -1], [20, 0, -1], [0, 0, 1]],
-     ]
+def ford_fulkerson():
+    init = 0
+    end = 4
+    m_init = (math.inf, -1, init)
+    f = []
 
-N = len(V)
-init = 0
-end = 4
-Tinit = (math.inf, -1, init)
-f = []
+    j = init
+    while j != -1:
+        k = init
+        m = [m_init]
+        s = {init}
 
-j = init
-while j != -1:
-    k = init
-    T = [Tinit]
-    S = {init}
+        while k != end:
+            j = get_max_vertex(k, graph, s)
+            if j == -1:
+                if k == init:
+                    break
+                else:
+                    k = m.pop()[2]
+                    continue
 
-    while k != end:
-        j = get_max_vertex(k, V, S)
-        if j == -1:
-            if k == init:
+            c = graph[k][j][0] if graph[k][j][2] == 1 else graph[k][j][1]
+            m.append((c, j, k))
+            s.add(j)
+
+            if j == end:
+                f.append(get_max_flow(m))
+                update_graph(graph, m, f[-1])
                 break
-            else:
-                k = T.pop()[2]
-                continue
 
-        c = V[k][j][0] if V[k][j][2] == 1 else V[k][j][1]
-        T.append((c, j, k))
-        S.add(j)
-
-        if j == end:
-            f.append(get_max_flow(T))
-            updateV(V, T, f[-1])
-            break
-
-        k = j
-
-F = sum(f)
-print(f"Max flow: {F}")
+            k = j
+    return sum(f)
