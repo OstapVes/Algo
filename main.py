@@ -1,47 +1,52 @@
-t = "aaa"
-p = [0] * len(t)
-j = 0
-i = 1
-while i < len(t):
-    if t[j] == t[i]:
-        p[i] = j + 1
-        i += 1
-        j += 1
+pattern = "aaaaaa"
+pi = [0] * len(pattern)
+index_one = 0
+index_two = 1
+while index_two < len(pattern):
+    if pattern[index_one] == pattern[index_two]:
+        pi[index_two] = index_one + 1
+        index_two += 1
+        index_one += 1
     else:
-        if j == 0:
-            p[i] = 0;
-            i += 1
+        if index_one == 0:
+            pi[index_two] = 0
+            index_two += 1
         else:
-            j = p[j - 1]
+            index_one = pi[index_one - 1]
+
+print(pi)
 
 
-def kmp(a,t):
-    a = "bbbaaaaaa"
-    m = len(t)
-    n = len(a)
-    i = 0
-    j = 0
-    while i < n:
-        if a[i] == t[j]:
-            i += 1
-            j += 1
-            if j == m:
+def kmp(text, pattern):
+    text = "bbbbbbbbb"
+    pattern_length = len(pattern)
+    text_length = len(text)
+    text_pos = 0
+    pattern_pos = 0
+    while text_pos < text_length:
+        if text[text_pos] == pattern[pattern_pos]:
+            text_pos += 1
+            pattern_pos += 1
+            if pattern_pos == pattern_length:
                 print("Знайдено")
                 return True
-                break
-        else:
-            if j > 0:
-                j = p[j - 1]
-            else:
-                i += 1
 
-    if i == n and j != m:
+        else:
+            if pattern_pos > 0:
+                pattern_pos = pi[pattern_pos - 1]
+            else:
+                text_pos += 1
+
+    if text_pos == text_length and pattern_pos != pattern_length:
         print("Не знайдено")
         return False
 
 
 if __name__ == '__main__':
-    print(p)
-    a = "bbbaaaaaa"
-    t = "aaaaaaaaaaa"
-    kmp(a,t)
+    kmp()
+
+
+if __name__ == '__main__':
+    text = "bbbaaaaaa"
+    pattern = "aaaaaaaaaaa"
+    kmp(text, pattern)
