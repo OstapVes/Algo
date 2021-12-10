@@ -1,12 +1,10 @@
 t = "aaa"
-
-p = [0]*len(t)
+p = [0] * len(t)
 j = 0
 i = 1
-
 while i < len(t):
     if t[j] == t[i]:
-        p[i] = j+1
+        p[i] = j + 1
         i += 1
         j += 1
     else:
@@ -14,28 +12,36 @@ while i < len(t):
             p[i] = 0;
             i += 1
         else:
-            j = p[j-1]
+            j = p[j - 1]
 
-print(p)
 
-a = "bbbaaaaaa"
-m = len(t)
-n = len(a)
-
-i = 0
-j = 0
-while i < n:
-    if a[i] == t[j]:
-        i += 1
-        j += 1
-        if j == m:
-            print("Знайдено")
-            break
-    else:
-        if j > 0:
-            j = p[j-1]
-        else:
+def kmp(a,t):
+    a = "bbbaaaaaa"
+    m = len(t)
+    n = len(a)
+    i = 0
+    j = 0
+    while i < n:
+        if a[i] == t[j]:
             i += 1
+            j += 1
+            if j == m:
+                print("Знайдено")
+                return True
+                break
+        else:
+            if j > 0:
+                j = p[j - 1]
+            else:
+                i += 1
 
-if i == n and j != m:
-    print("Не знайдено")
+    if i == n and j != m:
+        print("Не знайдено")
+        return False
+
+
+if __name__ == '__main__':
+    print(p)
+    a = "bbbaaaaaa"
+    t = "aaaaaaaaaaa"
+    kmp(a,t)
