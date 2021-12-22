@@ -1,1 +1,1 @@
-# Algo
+Algorithm KMP
